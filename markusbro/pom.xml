@@ -6,7 +6,8 @@
 
     <groupId>org.vg.markusbro</groupId>
     <artifactId>markusbro-parent</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
+
     <name>Markus Bro</name>
 
     <packaging>pom</packaging>

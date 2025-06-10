@@ -20,7 +20,7 @@
         <dependency>
             <groupId>org.vg.markusbro</groupId>
             <artifactId>markusbro-core</artifactId>
-            <version>3.4.5</version>
+            <version>1.0.0</version>
         </dependency>
 
         <!-- Telegram API -->
@@ -33,7 +33,7 @@
         <!-- Spring -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
         <dependency>
@@ -63,6 +63,13 @@
                 <configuration>
                     <source>23</source>
                     <target>23</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
             <plugin>
