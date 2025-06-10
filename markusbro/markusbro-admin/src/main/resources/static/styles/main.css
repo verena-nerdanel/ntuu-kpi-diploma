@@ -1,0 +1,141 @@
+body {
+    font-family: Tahoma;
+}
+
+.main {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+}
+
+.nav-menu {
+    width: 200px;
+    padding-right: 20px;
+}
+
+.nav-content {
+    flex-grow: 1;
+}
+
+.tab {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+}
+
+.tab-selected {
+    background-color: #007f80;
+    color: white !important;
+}
+
+.dialog {
+    max-width: 400px;
+    margin: 0 auto;
+    border: 1px solid #ccc;
+    padding: 20px;
+    background: white;
+}
+
+.flex {
+    display: flex;
+}
+
+a, a:visited {
+    color: #007f80;
+}
+
+h2 {
+    margin: 0;
+}
+
+input, select {
+    padding: 5px;
+    width: 100%;
+}
+
+table {
+    width: 100%;
+}
+
+td, th {
+    padding: 10px;
+}
+
+td {
+    vertical-align: top;
+}
+
+th {
+    text-align: left;
+    background-color: #ffd54f;
+}
+
+.dialog-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+ .dialog-buttons-panel {
+    margin-top: 20px;
+    display: flex;
+    gap: 20px;
+}
+
+.dialog-background {
+    background: #eee;
+}
+
+.button {
+    display: inline-block;
+    min-width: 120px;
+    flex-grow: 1;
+    padding: 10px;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    text-align: center;
+    font-size: 90%;
+}
+
+.button-neutral {
+    background: #eeeeee;
+    color: black !important;
+    border: 1px solid #ccc;
+}
+
+.button-positive {
+    background: #2a8ddb;
+    color: white !important;
+    border: 1px solid #92c5ed;
+}
+
+.button-negative {
+    background: #db2929;
+    color: white !important;
+    border: 1px solid #ed9292;
+}
+
+.danger {
+    color: #db2929;
+}
+
+.mt-1 {
+    margin-top: 10px;
+}
+
+.mt-2 {
+    margin-top: 20px;
+}
+
+.mt-4 {
+    margin-top: 40px;
+}
+
+.ml-2 {
+    margin-left: 20px;
+}
+
+.full-width {
+    width: 100%;
+}

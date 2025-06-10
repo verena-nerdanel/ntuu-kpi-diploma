@@ -1,0 +1,39 @@
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <title>Plugins</title>
+    <link type="text/css" rel="stylesheet" th:href="@{/styles/main.css}"/>
+</head>
+<body>
+<div class="main" sec:authorize="hasRole('ROLE_ADMIN')">
+    <div class="nav-menu">
+        <a th:href="@{/dashboard}" class="tab">Dashboard</a>
+        <a th:href="@{/users}" class="tab">Users</a>
+        <a th:href="@{/plugins}" class="tab tab-selected">Plugins</a>
+    </div>
+    <div class="nav-content">
+        <h2>Plugins</h2>
+        <hr>
+
+        <div th:switch="${plugins}">
+            <div th:case="null">No plugins found</div>
+            <table th:case="*">
+                <tr>
+                    <th>Key</th>
+                    <th>Classes</th>
+                    <th>Messages</th>
+                    <th>Data entries</th>
+                </tr>
+                <tr th:each="plugin : ${plugins}">
+                    <td th:text="${plugin.id}"></td>
+                    <td>
+                        <pre th:each="class : ${plugin.classNames}" th:text="${class}"></pre>
+                    </td>
+                    <td th:text="${plugin.totalMessages}"></td>
+                    <td th:text="${plugin.totalEntries}"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

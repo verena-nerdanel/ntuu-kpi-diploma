@@ -1,0 +1,85 @@
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <title>Users</title>
+    <link type="text/css" rel="stylesheet" th:href="@{/styles/main.css}"/>
+</head>
+<body>
+<div class="main" sec:authorize="hasRole('ROLE_ADMIN')">
+    <div class="nav-menu">
+        <a th:href="@{/dashboard}" class="tab">Dashboard</a>
+        <a th:href="@{/users}" class="tab tab-selected">Users</a>
+        <a th:href="@{/plugins}" class="tab">Plugins</a>
+    </div>
+    <div class="nav-content">
+        <h2>Users</h2>
+        <hr>
+
+        <div th:switch="${users}">
+            <div th:case="null">No users yet</div>
+            <table th:case="*">
+                <tr>
+                    <th>ID</th>
+                    <th>Nickname</th>
+                    <th>Messages</th>
+                    <th>Data entries</th>
+                    <th>Last active</th>
+                    <th colspan="2">Access</th>
+                </tr>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.id}"></td>
+                    <td th:text="'@' + ${user.nickname}"></td>
+                    <td th:text="${user.totalMessages}"></td>
+                    <td th:text="${user.totalEntries}"></td>
+                    <td th:text="${user.lastActive}"></td>
+                    <td>
+                        <div class="flex">
+                            <input type="checkbox" th:id="'access_' + ${user.id} + '_general'"
+                                   th:checked="${user.accessGeneral}" th:data-user-id="${user.id}"
+                                   th:data-access="GENERAL" onchange="changeAccess(this)">
+                            <label th:for="'access_' + ${user.id} + '_general'">General</label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="flex">
+                            <input type="checkbox" th:id="'access_' + ${user.id} + '_llm'"
+                                   th:checked="${user.accessLlm}" th:data-user-id="${user.id}" th:data-access="LLM"
+                                   onchange="changeAccess(this)">
+                            <label th:for="'access_' + ${user.id} + '_llm'">LLM</label>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    function changeAccess(target) {
+        const userId = target.attributes["data-user-id"].value;
+        const access = target.attributes["data-access"].value;
+        const value = target.checked;
+
+        try {
+            const response = fetch("users/" + userId, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ access, value })
+            })
+            .then(response => {
+                 if (!response.ok) {
+                    console.log("Not OK");
+                }
+            });
+        } catch (error) {
+            console.log("Error: " + error.message);
+        }
+
+        if (access === "GENERAL") {
+            document.getElementById("access_" + userId + "_llm").disabled = !value;
+        }
+    }
+</script>
+</body>
+</html>

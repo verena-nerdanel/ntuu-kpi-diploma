@@ -1,0 +1,38 @@
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <title>Dashboard</title>
+    <link type="text/css" rel="stylesheet" th:href="@{/styles/main.css}"/>
+</head>
+<body>
+<div class="main" sec:authorize="hasRole('ROLE_ADMIN')">
+    <div class="nav-menu">
+        <a th:href="@{/dashboard}" class="tab tab-selected">Dashboard</a>
+        <a th:href="@{/users}" class="tab">Users</a>
+        <a th:href="@{/plugins}" class="tab">Plugins</a>
+    </div>
+    <div class="nav-content">
+        <h2>Dashboard</h2>
+        <hr>
+
+        <table>
+            <tr>
+                <td>Total messages</td>
+                <td th:text="${data.totalMessages}"></td>
+            </tr>
+            <tr>
+                <td>Total users</td>
+                <td th:text="${data.totalUsers}"></td>
+            </tr>
+            <tr>
+                <td>Total plugins</td>
+                <td th:text="${data.totalPlugins}"></td>
+            </tr>
+            <tr>
+                <td>DB entries</td>
+                <td th:text="${data.totalDbEntries}"></td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>
