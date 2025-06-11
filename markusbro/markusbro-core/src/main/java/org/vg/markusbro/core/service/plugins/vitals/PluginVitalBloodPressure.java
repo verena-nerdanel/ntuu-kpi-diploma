@@ -3,8 +3,8 @@ package org.vg.markusbro.core.service.plugins.vitals;
 import lombok.Value;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
-import org.vg.markusbro.core.service.plugins.Context;
 import org.vg.markusbro.core.Utils;
+import org.vg.markusbro.core.service.plugins.Context;
 
 import java.text.SimpleDateFormat;
 import java.util.Collections;
@@ -13,8 +13,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.toList;
 
 public abstract class PluginVitalBloodPressure extends PluginVital {
 
@@ -129,11 +127,11 @@ public abstract class PluginVitalBloodPressure extends PluginVital {
             if (!entries.isEmpty()) {
                 final List<Integer> valuesSys = entries.stream()
                         .map(PluginVitalBloodPressure::getPressureSys)
-                        .collect(toList());
+                        .toList();
 
                 final List<Integer> valuesDia = entries.stream()
                         .map(PluginVitalBloodPressure::getPressureDia)
-                        .collect(toList());
+                        .toList();
 
                 final int minSys = Collections.min(valuesSys);
                 final int maxSys = Collections.max(valuesSys);

@@ -56,9 +56,7 @@ public class TelegramContext implements Context {
         final ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup(new String[0]);
         keyboardMarkup.resizeKeyboard(true);
 
-        options.forEach(value -> {
-            keyboardMarkup.addRow(new KeyboardButton(value));
-        });
+        options.forEach(value -> keyboardMarkup.addRow(new KeyboardButton(value)));
 
         bot.execute(new SendMessage(userId, text).replyMarkup(keyboardMarkup));
     }

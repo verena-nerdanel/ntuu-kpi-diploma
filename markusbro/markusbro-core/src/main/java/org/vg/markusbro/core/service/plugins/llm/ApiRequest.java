@@ -22,5 +22,5 @@ class Message {
 
 enum Role {
     user,
-    assistant;
+    assistant
 }

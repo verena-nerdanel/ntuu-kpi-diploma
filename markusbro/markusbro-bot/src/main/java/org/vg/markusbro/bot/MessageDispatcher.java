@@ -1,16 +1,15 @@
 package org.vg.markusbro.bot;
 
 import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.vg.markusbro.core.service.plugins.Context;
 import org.vg.markusbro.core.entity.UserEntity;
 import org.vg.markusbro.core.repository.UserRepository;
+import org.vg.markusbro.core.service.plugins.Context;
 import org.vg.markusbro.core.service.plugins.Plugin;
 
 import java.util.Date;
@@ -29,11 +28,6 @@ public class MessageDispatcher {
     @Transactional
     public void handle(TelegramBot bot, Message message) {
         handle(new TelegramContext(bot, message, findOrRegisterUser(message.from())));
-    }
-
-    @Transactional
-    public void handle(TelegramBot bot, CallbackQuery callbackQuery) {
-        handle(new TelegramContext(bot, callbackQuery, findOrRegisterUser(callbackQuery.from())));
     }
 
     private void handle(Context context) {
