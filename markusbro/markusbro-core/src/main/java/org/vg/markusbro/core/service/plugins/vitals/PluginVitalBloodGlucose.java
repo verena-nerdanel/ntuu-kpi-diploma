@@ -22,12 +22,6 @@ public abstract class PluginVitalBloodGlucose extends PluginVital {
     private static final String KEY_VITAL_BLOOD_GLUCOSE = "blood_glucose";
     private static final String KEY_SELECT_PERIOD = "PluginVitalBloodGlucoseView:pick_step";
 
-    // UI
-    protected final String OPTION_PERIOD_LAST_WEEK = getResource("report.period.lastWeek");
-    protected final String OPTION_PERIOD_LAST_MONTH = getResource("report.period.lastMonth");
-    protected final String OPTION_PERIOD_ALL = getResource("report.period.all");
-    protected final String OPTION_CANCEL = getResource("report.cancel");
-
     @Override
     public String getId() {
         return "vital.blood_glucose";

@@ -14,6 +14,12 @@ import static java.util.stream.Collectors.toList;
 
 public abstract class PluginVital extends AbstractPlugin {
 
+    // UI
+    protected final String OPTION_PERIOD_LAST_WEEK = getResource("report.period.lastWeek");
+    protected final String OPTION_PERIOD_LAST_MONTH = getResource("report.period.lastMonth");
+    protected final String OPTION_PERIOD_ALL = getResource("report.period.all");
+    protected final String OPTION_CANCEL = getResource("report.cancel");
+
     protected void storeVital(Context context, String key, String value) {
         writeValue(context, buildTemporalKey(key), value);
     }
