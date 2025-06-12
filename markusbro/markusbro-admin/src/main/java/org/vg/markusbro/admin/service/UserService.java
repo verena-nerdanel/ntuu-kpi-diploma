@@ -3,7 +3,7 @@ package org.vg.markusbro.admin.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.vg.markusbro.admin.dto.AccessType;
-import org.vg.markusbro.admin.dto.UserInfo;
+import org.vg.markusbro.admin.dto.UserModel;
 import org.vg.markusbro.core.entity.UserEntity;
 import org.vg.markusbro.core.repository.UserRepository;
 import org.vg.markusbro.core.service.storage.data.DataStorage;
@@ -20,11 +20,11 @@ public class UserService {
     @Autowired
     private DataStorage dataStorage;
 
-    public List<UserInfo> getUserInfos() {
-        final List<UserInfo> data = new ArrayList<>();
+    public List<UserModel> getUserModels() {
+        final List<UserModel> data = new ArrayList<>();
 
         for (UserEntity entity : userRepository.findAll()) {
-            data.add(UserInfo.builder()
+            data.add(UserModel.builder()
                     .id(entity.getUserId())
                     .nickname(entity.getUserNickname())
                     .totalMessages(entity.getTotalMessages())

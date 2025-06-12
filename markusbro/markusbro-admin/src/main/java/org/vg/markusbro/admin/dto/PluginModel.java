@@ -5,18 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserInfo {
-    private long id;
-    private String nickname;
+public class PluginModel {
+    private String id;
+    private List<String> classNames;
     private int totalMessages;
     private int totalEntries;
-    private Date lastActive;
-    private boolean accessGeneral;
-    private boolean accessLlm;
 }

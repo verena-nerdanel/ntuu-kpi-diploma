@@ -2,7 +2,7 @@ package org.vg.markusbro.admin.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.vg.markusbro.admin.dto.PluginInfo;
+import org.vg.markusbro.admin.dto.PluginModel;
 import org.vg.markusbro.core.service.plugins.Plugin;
 import org.vg.markusbro.core.service.storage.data.DataStorage;
 
@@ -20,14 +20,14 @@ public class PluginsService {
     @Autowired
     private DataStorage dataStorage;
 
-    public List<PluginInfo> getPluginInfos() {
+    public List<PluginModel> getPluginsModel() {
         final Map<String, List<String>> classes = new HashMap<>();
 
         plugins.forEach(p -> classes.computeIfAbsent(p.getId(), x -> new ArrayList<>()).add(p.getClass().getSimpleName()));
 
         return classes.entrySet().stream()
                 .sorted(Map.Entry.comparingByKey())
-                .map(e -> PluginInfo.builder()
+                .map(e -> PluginModel.builder()
                         .id(e.getKey())
                         .classNames(e.getValue())
                         .totalMessages(-1)

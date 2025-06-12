@@ -16,7 +16,7 @@ public class PluginsController {
 
     @GetMapping
     public String getDashboard(Model model) {
-        model.addAttribute("plugins", pluginsService.getPluginInfos());
+        model.addAttribute("plugins", pluginsService.getPluginsModel());
         return "plugins";
     }
 }
