@@ -30,7 +30,6 @@ public class PluginsService {
                 .map(e -> PluginModel.builder()
                         .id(e.getKey())
                         .classNames(e.getValue())
-                        .totalMessages(-1)
                         .totalEntries(dataStorage.countForPlugin(e.getKey()))
                         .build()
                 )

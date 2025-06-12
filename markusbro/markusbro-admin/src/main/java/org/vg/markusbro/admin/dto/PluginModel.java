@@ -14,6 +14,5 @@ import java.util.List;
 public class PluginModel {
     private String id;
     private List<String> classNames;
-    private int totalMessages;
     private int totalEntries;
 }

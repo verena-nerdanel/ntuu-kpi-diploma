@@ -20,7 +20,6 @@
                 <tr>
                     <th>Key</th>
                     <th>Classes</th>
-                    <th>Messages</th>
                     <th>Data entries</th>
                 </tr>
                 <tr th:each="plugin : ${plugins}">
@@ -28,7 +27,6 @@
                     <td>
                         <pre th:each="class : ${plugin.classNames}" th:text="${class}"></pre>
                     </td>
-                    <td th:text="${plugin.totalMessages}"></td>
                     <td th:text="${plugin.totalEntries}"></td>
                 </tr>
             </table>
