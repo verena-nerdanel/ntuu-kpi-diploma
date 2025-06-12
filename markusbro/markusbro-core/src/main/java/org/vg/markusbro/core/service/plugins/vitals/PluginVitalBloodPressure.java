@@ -1,22 +1,27 @@
 package org.vg.markusbro.core.service.plugins.vitals;
 
+import com.itextpdf.text.DocumentException;
 import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.vg.markusbro.core.Utils;
 import org.vg.markusbro.core.service.plugins.Context;
+import org.vg.markusbro.core.service.plugins.vitals.report.VitalReportGenerator;
+import org.vg.markusbro.core.service.plugins.vitals.report.VitalReportParams;
 
-import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public abstract class PluginVitalBloodPressure extends PluginVital {
 
     private static final String KEY_VITAL_BLOOD_PRESSURE = "blood_pressure";
+    private static final String KEY_SELECT_PERIOD = "PluginVitalBloodPressureView:pick_step";
 
     @Override
     public String getId() {
@@ -146,7 +151,7 @@ public abstract class PluginVitalBloodPressure extends PluginVital {
     }
 
     @Component
-    public static class PluginVitalBloodPressureView extends PluginVitalBloodPressure {
+    public static class PluginVitalBloodPressureView_step1 extends PluginVitalBloodPressure {
 
         @Override
         public double getScore(Context context) {
@@ -160,16 +165,109 @@ public abstract class PluginVitalBloodPressure extends PluginVital {
             final List<TemporalVital> entries = getVitals(context, KEY_VITAL_BLOOD_PRESSURE);
 
             if (!entries.isEmpty()) {
-                final SimpleDateFormat format = Utils.getDateTimeFormatter();
+                context.replyWithOptions(getResource("report.selectPeriod"), Arrays.asList(
+                        OPTION_PERIOD_LAST_WEEK,
+                        OPTION_PERIOD_LAST_MONTH,
+                        OPTION_PERIOD_ALL,
+                        OPTION_CANCEL
+                ));
 
-                final String result = entries.stream()
-                        .sorted(Comparator.comparing(TemporalVital::time))
-                        .map(e -> format.format(e.time()) + " " + e.value())
-                        .collect(Collectors.joining("\n"));
-
-                context.reply(String.format("Here are all your blood pressure measurements (%d):\n\n%s", entries.size(), result));
+                writeValue(context, KEY_SELECT_PERIOD, System.currentTimeMillis());
             } else {
                 context.reply(getResource("response.nothingFound"));
+            }
+        }
+    }
+
+    @Slf4j
+    @Component
+    public static class PluginVitalBloodPressureView_step2 extends PluginVitalBloodPressure {
+
+        @Override
+        public double getScore(Context context) {
+            final String value = readValue(context, KEY_SELECT_PERIOD);
+            if (value == null) {
+                return SCORE_NEVER;
+            }
+
+            removeValue(context, KEY_SELECT_PERIOD);
+            return SCORE_ALWAYS;
+        }
+
+        @Override
+        public void handle(Context context) {
+            if (OPTION_PERIOD_LAST_WEEK.equals(context.getMessage())) {
+                sendReport(context, Utils.getDateLastWeek(), null);
+            } else if (OPTION_PERIOD_LAST_MONTH.equals(context.getMessage())) {
+                sendReport(context, Utils.getDateLastMonth(), null);
+            } else if (OPTION_PERIOD_ALL.equals(context.getMessage())) {
+                sendReport(context, null, null);
+            } else {
+                context.removeOptions(getResource("report.cancelled"));
+            }
+        }
+
+        private void sendReport(Context context, Date start, Date end) {
+            final List<TemporalVital> entries = getVitals(context, KEY_VITAL_BLOOD_PRESSURE, start, end);
+
+            if (entries.isEmpty()) {
+                context.removeOptions(getResource("response.nothingFound"));
+                return;
+            }
+
+            final Date actualStart = start != null
+                    ? start
+                    : entries.stream().map(TemporalVital::time).min(Date::compareTo).get();
+
+            final Date actualEnd = end != null
+                    ? end
+                    : entries.stream().map(TemporalVital::time).max(Date::compareTo).get();
+
+            final TemporalVital min = entries.stream()
+                    .min(Comparator.comparing(PluginVitalBloodPressure::getPressureDia))
+                    .get();
+
+            final TemporalVital max = entries.stream()
+                    .max(Comparator.comparing(PluginVitalBloodPressure::getPressureSys))
+                    .get();
+
+            final double avgSys = entries.stream()
+                    .mapToInt(PluginVitalBloodPressure::getPressureSys)
+                    .average()
+                    .getAsDouble();
+
+            final double avgDia = entries.stream()
+                    .mapToInt(PluginVitalBloodPressure::getPressureDia)
+                    .average()
+                    .getAsDouble();
+
+            final String average = String.format("%.0f/%.0f", avgSys, avgDia);
+
+            File tempFile = null;
+            try {
+                tempFile = Files.createTempFile(String.valueOf(context.getUserId()), "").toFile();
+
+                VitalReportGenerator.generateReport(tempFile, VitalReportParams.builder()
+                        .reportTitle(getResource("report.title"))
+                        .reportPeriodStart(actualStart)
+                        .reportPeriodEnd(actualEnd)
+                        .minValue(min)
+                        .maxValue(max)
+                        .averageValue(average)
+                        .data(entries)
+                        .userId(context.getUserId())
+                        .userName(context.getUserName())
+                        .build());
+
+                final String timestamp = LocalDateTime.now().format(Utils.getFileNameFormatter());
+                final String fileName = getResource("report.title") + " (" + timestamp + ").pdf";
+                context.sendFile(tempFile, fileName, true);
+            } catch (IOException | DocumentException e) {
+                log.error(e.getMessage(), e);
+            } finally {
+                if (tempFile != null) {
+                    tempFile.deleteOnExit();
+                }
             }
         }
     }

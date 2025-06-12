@@ -56,7 +56,7 @@ public class VitalReportGenerator {
         table.addCell("@" + params.getUserName() + " (" + params.getUserId() + ")");
         table.addCell("Report generated at");
         table.addCell(formatDateTime(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant())));
-        table.addCell("Period");
+        table.addCell("Effective period");
         table.addCell(dateFmt.format(params.getReportPeriodStart()) + " – " + dateFmt.format(params.getReportPeriodEnd()));
         table.addCell("Average value");
         table.addCell(params.getAverageValue());
