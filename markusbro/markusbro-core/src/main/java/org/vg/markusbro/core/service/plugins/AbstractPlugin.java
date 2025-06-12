@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 public abstract class AbstractPlugin implements Plugin {
@@ -52,7 +54,7 @@ public abstract class AbstractPlugin implements Plugin {
         while (Plugin.class.isAssignableFrom(c)) {
             try {
                 final ResourceBundle bundle = ResourceBundle.getBundle("plugins/" + c.getSimpleName(), locale);
-                return bundle.getString(key);
+                return injectEnvVariables(bundle.getString(key));
             } catch (MissingResourceException e) {
                 // ignore and go further
             }
@@ -62,6 +64,15 @@ public abstract class AbstractPlugin implements Plugin {
 
         log.warn("No resource found for plugin {} and key \"{}\"", getClass().getCanonicalName(), key);
         return null;
+    }
+
+    private static String injectEnvVariables(String s) {
+        return Pattern.compile("\\$\\{(.+)\\}")
+                .matcher(s)
+                .replaceAll(mr -> {
+                    String envVal = System.getenv(mr.group(1));
+                    return Matcher.quoteReplacement(envVal != null ? envVal : mr.group());
+                });
     }
 
     protected String getResource(String key, Object... args) {
