@@ -68,6 +68,8 @@
     </dependencies>
 
     <build>
+        <finalName>markusbro-admin</finalName>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
