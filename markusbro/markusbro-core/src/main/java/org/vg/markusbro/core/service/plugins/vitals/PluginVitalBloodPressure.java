@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 public abstract class PluginVitalBloodPressure extends PluginVital {
 
-    private static final String VITAL_BLOOD_PRESSURE = "blood_pressure";
+    private static final String KEY_VITAL_BLOOD_PRESSURE = "blood_pressure";
 
     @Override
     public String getId() {
@@ -47,7 +47,7 @@ public abstract class PluginVitalBloodPressure extends PluginVital {
         public void handle(Context context) {
             final BloodPressureData data = new BloodPressureData(context.getMessage());
             final String value = data.getBloodSys() + "/" + data.getBloodDia();
-            storeVital(context, VITAL_BLOOD_PRESSURE, value);
+            storeVital(context, KEY_VITAL_BLOOD_PRESSURE, value);
             context.reply(getResource("response.entryAdded", value));
         }
     }
@@ -90,7 +90,7 @@ public abstract class PluginVitalBloodPressure extends PluginVital {
 
         @Override
         public void handle(Context context) {
-            final List<TemporalVital> entries = getVitals(context, VITAL_BLOOD_PRESSURE);
+            final List<TemporalVital> entries = getVitals(context, KEY_VITAL_BLOOD_PRESSURE);
 
             if (!entries.isEmpty()) {
                 final double avgSys = entries.stream()
@@ -122,7 +122,7 @@ public abstract class PluginVitalBloodPressure extends PluginVital {
 
         @Override
         public void handle(Context context) {
-            final List<TemporalVital> entries = getVitals(context, VITAL_BLOOD_PRESSURE);
+            final List<TemporalVital> entries = getVitals(context, KEY_VITAL_BLOOD_PRESSURE);
 
             if (!entries.isEmpty()) {
                 final List<Integer> valuesSys = entries.stream()
@@ -157,7 +157,7 @@ public abstract class PluginVitalBloodPressure extends PluginVital {
 
         @Override
         public void handle(Context context) {
-            final List<TemporalVital> entries = getVitals(context, VITAL_BLOOD_PRESSURE);
+            final List<TemporalVital> entries = getVitals(context, KEY_VITAL_BLOOD_PRESSURE);
 
             if (!entries.isEmpty()) {
                 final SimpleDateFormat format = Utils.getDateTimeFormatter();

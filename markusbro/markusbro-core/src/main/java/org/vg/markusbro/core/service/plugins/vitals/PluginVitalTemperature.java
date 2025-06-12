@@ -16,7 +16,7 @@ import static org.vg.markusbro.core.Utils.parseDouble;
 
 public abstract class PluginVitalTemperature extends PluginVital {
 
-    private static final String VITAL_TEMPERATURE = "temperature";
+    private static final String KEY_VITAL_TEMPERATURE = "temperature";
 
     @Override
     public String getId() {
@@ -39,7 +39,7 @@ public abstract class PluginVitalTemperature extends PluginVital {
         public void handle(Context context) {
             final TemperatureData data = new TemperatureData(context.getMessage());
             final double value = data.getTemperature();
-            storeVital(context, VITAL_TEMPERATURE, value);
+            storeVital(context, KEY_VITAL_TEMPERATURE, value);
             context.reply(getResource("response.entryAdded", value));
         }
     }
@@ -85,7 +85,7 @@ public abstract class PluginVitalTemperature extends PluginVital {
 
         @Override
         public void handle(Context context) {
-            final List<TemporalVital> entries = getVitals(context, VITAL_TEMPERATURE);
+            final List<TemporalVital> entries = getVitals(context, KEY_VITAL_TEMPERATURE);
 
             if (!entries.isEmpty()) {
                 final double avg = entries.stream()
@@ -112,7 +112,7 @@ public abstract class PluginVitalTemperature extends PluginVital {
 
         @Override
         public void handle(Context context) {
-            final List<TemporalVital> entries = getVitals(context, VITAL_TEMPERATURE);
+            final List<TemporalVital> entries = getVitals(context, KEY_VITAL_TEMPERATURE);
 
             if (!entries.isEmpty()) {
                 final double min = entries.stream()
@@ -143,7 +143,7 @@ public abstract class PluginVitalTemperature extends PluginVital {
 
         @Override
         public void handle(Context context) {
-            final List<TemporalVital> entries = getVitals(context, VITAL_TEMPERATURE);
+            final List<TemporalVital> entries = getVitals(context, KEY_VITAL_TEMPERATURE);
 
             if (!entries.isEmpty()) {
                 final SimpleDateFormat format = Utils.getDateTimeFormatter();
